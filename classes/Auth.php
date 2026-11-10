@@ -37,7 +37,7 @@ class Auth {
 
     // Login
     public function login($username, $password) {
-        $stmt = $this->pdo->prepare("SELECT * FROM UserLogin WHERE Username = ?");
+        $stmt = $this->pdo->prepare("SELECT * FROM user_logins WHERE Username = ?");
         $stmt->execute([$username]);
         $user = $stmt->fetch();
 
@@ -50,7 +50,7 @@ class Auth {
             if ($user['PatientID']) $_SESSION['patient_id'] = $user['PatientID'];
             if ($user['TherapistID']) $_SESSION['therapist_id'] = $user['TherapistID'];
 
-            $update = $this->pdo->prepare("UPDATE UserLogin SET LastLogin = NOW() WHERE UserID = ?");
+            $update = $this->pdo->prepare("UPDATE user_logins SET LastLogin = NOW() WHERE UserID = ?");
             $update->execute([$user['UserID']]);
 
             return $user['Role']; 

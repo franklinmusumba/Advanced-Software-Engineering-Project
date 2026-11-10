@@ -18,10 +18,10 @@ try {
             p.LastName AS PatientLast,
             t.FirstName AS TherapistFirst,
             t.LastName AS TherapistLast
-        FROM sessionnote sn
-        JOIN appointment a ON sn.AppointmentID = a.AppointmentID
-        JOIN patient p ON a.PatientID = p.PatientID
-        JOIN therapist t ON sn.TherapistID = t.TherapistID
+        FROM session_notes sn
+        JOIN appointments a ON sn.AppointmentID = a.AppointmentID
+        JOIN patients p ON a.PatientID = p.PatientID
+        JOIN therapists t ON sn.TherapistID = t.TherapistID
         ORDER BY sn.CreatedDate DESC
     ";
     $stmt = $pdo->query($query);

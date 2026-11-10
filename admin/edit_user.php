@@ -18,9 +18,9 @@ $stmt = $pdo->prepare("
     SELECT u.UserID, u.Username, u.Role, 
            COALESCE(p.FirstName, t.FirstName, 'Admin') as FirstName,
            COALESCE(p.LastName, t.LastName, 'User') as LastName
-    FROM userlogin u
-    LEFT JOIN patient p ON u.PatientID = p.PatientID
-    LEFT JOIN therapist t ON u.TherapistID = t.TherapistID
+    FROM user_logins u
+    LEFT JOIN patients p ON u.PatientID = p.PatientID
+    LEFT JOIN therapists t ON u.TherapistID = t.TherapistID
     WHERE u.UserID = ?
 ");
 $stmt->execute([$userId]);
