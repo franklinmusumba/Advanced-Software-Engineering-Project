@@ -60,7 +60,8 @@ $adminName = "Jordan"; // Default fallback
         </div>
         <div class="nav-links">
             <a href="dashboard.php" class="active">Overview</a>
-            <a href="#">Manage users</a>
+            <a href="users.php">Manage users</a>
+            <a href="reports.php">Reports</a>
         </div>
         <div class="nav-user">
             <div class="avatar">JA</div>
@@ -80,7 +81,7 @@ $adminName = "Jordan"; // Default fallback
                 <h1>Care service at a glance.</h1>
                 <p class="text-muted" style="margin-top: 8px;">Operational information only — private notes and mood logs are never shown.</p>
             </div>
-            <a href="#" class="btn-lime">Manage users</a>
+            <a href="users.php" class="btn-lime">Manage users</a>
         </div>
 
         <!-- Stats Grid -->
