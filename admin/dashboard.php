@@ -20,14 +20,14 @@ try {
     $stmt = $pdo->query("SELECT COUNT(*) FROM Appointment WHERE MONTH(AppointmentDate) = MONTH(CURRENT_DATE()) AND YEAR(AppointmentDate) = YEAR(CURRENT_DATE())");
     $appointmentsThisMonth = $stmt->fetchColumn();
 
-    // Appointments per counsellor (Assuming tables: Therapist, Appointment)
+        // Appointments per counsellor
     $query = "
-        SELECT t.FirstName, t.LastName, t.Specialty, 
+        SELECT t.FirstName, t.LastName, t.Specialization, 
                COUNT(a.AppointmentID) as Total,
                SUM(CASE WHEN a.Status = 'Booked' THEN 1 ELSE 0 END) as Upcoming,
                SUM(CASE WHEN a.Status = 'Completed' THEN 1 ELSE 0 END) as Completed
-        FROM Therapist t
-        LEFT JOIN Appointment a ON t.TherapistID = a.TherapistID
+        FROM therapist t
+        LEFT JOIN appointment a ON t.TherapistID = a.TherapistID
         GROUP BY t.TherapistID
     ";
     $stmt = $pdo->query($query);
@@ -145,6 +145,7 @@ $adminName = "Jordan"; // Default fallback
                                 <td><?= $stat['Upcoming'] ?></td>
                                 <td><?= $stat['Completed'] ?></td>
                                 <td><strong><?= $stat['Total'] ?></strong></td>
+                                <td><?= htmlspecialchars($stat['Specialization'] ?? 'General Counselling') ?></td>
                             </tr>
                         <?php endforeach; ?>
                     <?php endif; ?>
