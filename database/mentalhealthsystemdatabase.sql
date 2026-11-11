@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 10, 2026 at 06:15 PM
+-- Generation Time: Nov 11, 2026 at 06:06 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -37,6 +37,14 @@ CREATE TABLE `appointment` (
   `Status` varchar(20) NOT NULL,
   `NotesForSession` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `appointment`
+--
+
+INSERT INTO `appointment` (`AppointmentID`, `PatientID`, `TherapistID`, `AppointmentDate`, `AppointmentTime`, `DurationMinutes`, `Status`, `NotesForSession`) VALUES
+(1, 1, 1, '2026-11-10', '10:30:00', 50, 'Booked', NULL),
+(2, 1, 1, '2026-11-10', '10:00:00', 50, 'Completed', NULL);
 
 -- --------------------------------------------------------
 
@@ -75,6 +83,13 @@ CREATE TABLE `patient` (
   `AnonymousID` varchar(50) DEFAULT NULL,
   `RegistrationDate` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `patient`
+--
+
+INSERT INTO `patient` (`PatientID`, `FirstName`, `LastName`, `DateOfBirth`, `Gender`, `Email`, `PhoneNumber`, `Address`, `EmergencyContactName`, `EmergencyContactPhone`, `AnonymousID`, `RegistrationDate`) VALUES
+(1, 'Amara', 'Smith', '2003-05-12', NULL, 'amara@su.edu', NULL, NULL, NULL, NULL, 'ANON-67664ada-dd2b-11f1-91ef-0a002700000a', '2026-11-10');
 
 --
 -- Triggers `patient`
@@ -118,6 +133,13 @@ CREATE TABLE `sessionnote` (
   `IsConfidential` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `sessionnote`
+--
+
+INSERT INTO `sessionnote` (`SessionNoteID`, `AppointmentID`, `TherapistID`, `NoteContent`, `CreatedDate`, `IsConfidential`) VALUES
+(1, 2, 1, 'Student reported feeling overwhelmed by upcoming exams. We discussed time-blocking strategies and practiced a grounding exercise. Student will try the 5-4-3-2-1 technique before studying next week.', '2026-11-10 22:23:48', 0);
+
 -- --------------------------------------------------------
 
 --
@@ -135,6 +157,13 @@ CREATE TABLE `therapist` (
   `HireDate` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `therapist`
+--
+
+INSERT INTO `therapist` (`TherapistID`, `FirstName`, `LastName`, `Specialization`, `LicenseNumber`, `Email`, `PhoneNumber`, `HireDate`) VALUES
+(1, 'Maya', 'Chen', 'Anxiety & stress', 'SU-COUN-28491', 'm.chen@su.edu', NULL, '2024-01-15');
+
 -- --------------------------------------------------------
 
 --
@@ -150,6 +179,13 @@ CREATE TABLE `userlogin` (
   `Role` varchar(20) NOT NULL,
   `LastLogin` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `userlogin`
+--
+
+INSERT INTO `userlogin` (`UserID`, `PatientID`, `TherapistID`, `Username`, `PasswordHash`, `Role`, `LastLogin`) VALUES
+(2, NULL, NULL, 'admin@su.edu', '$2y$10$SDrGhmhBBO2BiibfY6.8SOK.fS.sJPst/5OwUjbyPz.Gv/AklUcVy', 'Admin', '2026-11-10 21:55:19');
 
 --
 -- Indexes for dumped tables
@@ -218,7 +254,7 @@ ALTER TABLE `userlogin`
 -- AUTO_INCREMENT for table `appointment`
 --
 ALTER TABLE `appointment`
-  MODIFY `AppointmentID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `AppointmentID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `moodtracker`
@@ -230,7 +266,7 @@ ALTER TABLE `moodtracker`
 -- AUTO_INCREMENT for table `patient`
 --
 ALTER TABLE `patient`
-  MODIFY `PatientID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `PatientID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `reminder`
@@ -242,19 +278,19 @@ ALTER TABLE `reminder`
 -- AUTO_INCREMENT for table `sessionnote`
 --
 ALTER TABLE `sessionnote`
-  MODIFY `SessionNoteID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `SessionNoteID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `therapist`
 --
 ALTER TABLE `therapist`
-  MODIFY `TherapistID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `TherapistID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `userlogin`
 --
 ALTER TABLE `userlogin`
-  MODIFY `UserID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `UserID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Constraints for dumped tables
