@@ -8,7 +8,7 @@ define('DB_PASS', '');
 // App Settings
 define('APP_NAME', 'SU Care Tracker');
 // Your actual folder name in htdocs
-define('BASE_URL', 'http://localhost/mental-health-system/'); 
+define('BASE_URL', 'http://localhost/mental-health-system/Advanced-Software-Engineering-Project/'); 
 
 // Start Session globally
 if (session_status() === PHP_SESSION_NONE) {
