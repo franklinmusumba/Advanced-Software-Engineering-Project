@@ -1,5 +1,16 @@
+<<<<<<< HEAD
 -- phpMyAdmin SQL Dump (Complete with Tables, Constraints & Triggers)
 -- Database: `mentalhealthsystemdatabase`
+=======
+-- phpMyAdmin SQL Dump
+-- version 5.2.1
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1
+-- Generation Time: Nov 11, 2026 at 06:06 AM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
+>>>>>>> 15e2dc3fc90b0750c7fda323f3c3f7e4f485f421
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -28,8 +39,27 @@ CREATE TABLE `appointments` (
   KEY `TherapistID` (`TherapistID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+<<<<<<< HEAD
 CREATE TABLE `moodtrackers` (
   `MoodEntryID` int(11) NOT NULL AUTO_INCREMENT,
+=======
+--
+-- Dumping data for table `appointment`
+--
+
+INSERT INTO `appointment` (`AppointmentID`, `PatientID`, `TherapistID`, `AppointmentDate`, `AppointmentTime`, `DurationMinutes`, `Status`, `NotesForSession`) VALUES
+(1, 1, 1, '2026-11-10', '10:30:00', 50, 'Booked', NULL),
+(2, 1, 1, '2026-11-10', '10:00:00', 50, 'Completed', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `moodtracker`
+--
+
+CREATE TABLE `moodtracker` (
+  `MoodEntryID` int(11) NOT NULL,
+>>>>>>> 15e2dc3fc90b0750c7fda323f3c3f7e4f485f421
   `PatientID` int(11) NOT NULL,
   `MoodDate` date NOT NULL,
   `MoodScore` int(11) NOT NULL,
@@ -59,8 +89,38 @@ CREATE TABLE `patients` (
   UNIQUE KEY `AnonymousID` (`AnonymousID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+<<<<<<< HEAD
 CREATE TABLE `reminders` (
   `ReminderID` int(11) NOT NULL AUTO_INCREMENT,
+=======
+--
+-- Dumping data for table `patient`
+--
+
+INSERT INTO `patient` (`PatientID`, `FirstName`, `LastName`, `DateOfBirth`, `Gender`, `Email`, `PhoneNumber`, `Address`, `EmergencyContactName`, `EmergencyContactPhone`, `AnonymousID`, `RegistrationDate`) VALUES
+(1, 'Amara', 'Smith', '2003-05-12', NULL, 'amara@su.edu', NULL, NULL, NULL, NULL, 'ANON-67664ada-dd2b-11f1-91ef-0a002700000a', '2026-11-10');
+
+--
+-- Triggers `patient`
+--
+DELIMITER $$
+CREATE TRIGGER `trg_patient_before_insert` BEFORE INSERT ON `patient` FOR EACH ROW BEGIN
+    IF NEW.AnonymousID IS NULL THEN
+        SET NEW.AnonymousID = CONCAT('ANON-', UUID());
+    END IF;
+END
+$$
+DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `reminder`
+--
+
+CREATE TABLE `reminder` (
+  `ReminderID` int(11) NOT NULL,
+>>>>>>> 15e2dc3fc90b0750c7fda323f3c3f7e4f485f421
   `AppointmentID` int(11) NOT NULL,
   `RemainderDateTime` datetime NOT NULL,
   `Channel` varchar(10) NOT NULL,
@@ -82,8 +142,26 @@ CREATE TABLE `session_notes` (
   KEY `TherapistID` (`TherapistID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+<<<<<<< HEAD
 CREATE TABLE `therapists` (
   `TherapistID` int(11) NOT NULL AUTO_INCREMENT,
+=======
+--
+-- Dumping data for table `sessionnote`
+--
+
+INSERT INTO `sessionnote` (`SessionNoteID`, `AppointmentID`, `TherapistID`, `NoteContent`, `CreatedDate`, `IsConfidential`) VALUES
+(1, 2, 1, 'Student reported feeling overwhelmed by upcoming exams. We discussed time-blocking strategies and practiced a grounding exercise. Student will try the 5-4-3-2-1 technique before studying next week.', '2026-11-10 22:23:48', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `therapist`
+--
+
+CREATE TABLE `therapist` (
+  `TherapistID` int(11) NOT NULL,
+>>>>>>> 15e2dc3fc90b0750c7fda323f3c3f7e4f485f421
   `FirstName` varchar(50) NOT NULL,
   `LastName` varchar(50) NOT NULL,
   `Specialization` varchar(100) DEFAULT NULL,
@@ -96,8 +174,26 @@ CREATE TABLE `therapists` (
   UNIQUE KEY `Email` (`Email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+<<<<<<< HEAD
 CREATE TABLE `user_logins` (
   `UserID` int(11) NOT NULL AUTO_INCREMENT,
+=======
+--
+-- Dumping data for table `therapist`
+--
+
+INSERT INTO `therapist` (`TherapistID`, `FirstName`, `LastName`, `Specialization`, `LicenseNumber`, `Email`, `PhoneNumber`, `HireDate`) VALUES
+(1, 'Maya', 'Chen', 'Anxiety & stress', 'SU-COUN-28491', 'm.chen@su.edu', NULL, '2024-01-15');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `userlogin`
+--
+
+CREATE TABLE `userlogin` (
+  `UserID` int(11) NOT NULL,
+>>>>>>> 15e2dc3fc90b0750c7fda323f3c3f7e4f485f421
   `PatientID` int(11) DEFAULT NULL,
   `TherapistID` int(11) DEFAULT NULL,
   `Username` varchar(50) NOT NULL,
@@ -110,9 +206,22 @@ CREATE TABLE `user_logins` (
   UNIQUE KEY `TherapistID` (`TherapistID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+<<<<<<< HEAD
 -- ==========================================
 -- 2. AUDIT & STATS TABLES (Needed for Triggers)
 -- ==========================================
+=======
+--
+-- Dumping data for table `userlogin`
+--
+
+INSERT INTO `userlogin` (`UserID`, `PatientID`, `TherapistID`, `Username`, `PasswordHash`, `Role`, `LastLogin`) VALUES
+(2, NULL, NULL, 'admin@su.edu', '$2y$10$SDrGhmhBBO2BiibfY6.8SOK.fS.sJPst/5OwUjbyPz.Gv/AklUcVy', 'Admin', '2026-11-10 21:55:19');
+
+--
+-- Indexes for dumped tables
+--
+>>>>>>> 15e2dc3fc90b0750c7fda323f3c3f7e4f485f421
 
 CREATE TABLE `SessionNoteAudit` (
   `AuditID` int(11) NOT NULL AUTO_INCREMENT,
@@ -162,20 +271,37 @@ ALTER TABLE `moodtrackers`
 ALTER TABLE `reminders`
   ADD CONSTRAINT `reminders_ibfk_1` FOREIGN KEY (`AppointmentID`) REFERENCES `appointments` (`AppointmentID`) ON DELETE CASCADE;
 
+<<<<<<< HEAD
 ALTER TABLE `session_notes`
   ADD CONSTRAINT `session_notes_ibfk_1` FOREIGN KEY (`AppointmentID`) REFERENCES `appointments` (`AppointmentID`) ON DELETE CASCADE,
   ADD CONSTRAINT `session_notes_ibfk_2` FOREIGN KEY (`TherapistID`) REFERENCES `therapists` (`TherapistID`) ON DELETE CASCADE;
+=======
+--
+-- AUTO_INCREMENT for table `appointment`
+--
+ALTER TABLE `appointment`
+  MODIFY `AppointmentID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+>>>>>>> 15e2dc3fc90b0750c7fda323f3c3f7e4f485f421
 
 ALTER TABLE `user_logins`
   ADD CONSTRAINT `user_logins_ibfk_1` FOREIGN KEY (`PatientID`) REFERENCES `patients` (`PatientID`) ON DELETE CASCADE,
   ADD CONSTRAINT `user_logins_ibfk_2` FOREIGN KEY (`TherapistID`) REFERENCES `therapists` (`TherapistID`) ON DELETE CASCADE;
 
+<<<<<<< HEAD
 -- ==========================================
 -- 4. TRIGGERS
 -- ==========================================
+=======
+--
+-- AUTO_INCREMENT for table `patient`
+--
+ALTER TABLE `patient`
+  MODIFY `PatientID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+>>>>>>> 15e2dc3fc90b0750c7fda323f3c3f7e4f485f421
 
 DELIMITER $$
 
+<<<<<<< HEAD
 -- Trigger 1: Auto-generate AnonymousID
 CREATE TRIGGER `trg_patient_before_insert` 
 BEFORE INSERT ON `patients` 
@@ -203,6 +329,25 @@ BEGIN
     INSERT INTO `PatientArchive` (PatientID, FirstName, LastName, Email)
     VALUES (OLD.PatientID, OLD.FirstName, OLD.LastName, OLD.Email);
 END$$
+=======
+--
+-- AUTO_INCREMENT for table `sessionnote`
+--
+ALTER TABLE `sessionnote`
+  MODIFY `SessionNoteID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `therapist`
+--
+ALTER TABLE `therapist`
+  MODIFY `TherapistID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `userlogin`
+--
+ALTER TABLE `userlogin`
+  MODIFY `UserID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+>>>>>>> 15e2dc3fc90b0750c7fda323f3c3f7e4f485f421
 
 -- Trigger 4: Update Stats after Appointment Delete
 CREATE TRIGGER `trg_appointment_after_delete`
