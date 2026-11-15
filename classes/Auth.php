@@ -16,14 +16,14 @@ class Auth {
         try {
             $this->pdo->beginTransaction();
 
-            // 1. Insert into Patient table
-            $stmt = $this->pdo->prepare("INSERT INTO Patient (FirstName, LastName, Email, DateOfBirth) VALUES (?, ?, ?, ?)");
+            // 1. Insert into patients table
+            $stmt = $this->pdo->prepare("INSERT INTO patients (FirstName, LastName, Email, DateOfBirth, RegistrationDate) VALUES (?, ?, ?, ?, CURDATE())");
             $stmt->execute([$firstName, $lastName, $email, $dob]);
             $patientId = $this->pdo->lastInsertId();
 
-            // 2. Insert into UserLogin table
+            // 2. Insert into user_logins table
             $hash = password_hash($password, PASSWORD_DEFAULT);
-            $stmt2 = $this->pdo->prepare("INSERT INTO UserLogin (Username, PasswordHash, Role, PatientID) VALUES (?, ?, 'Patient', ?)");
+            $stmt2 = $this->pdo->prepare("INSERT INTO user_logins (Username, PasswordHash, Role, PatientID) VALUES (?, ?, 'Patient', ?)");
             $stmt2->execute([$email, $hash, $patientId]);
 
             $this->pdo->commit();
