@@ -78,13 +78,19 @@ try {
                 <p class="text-muted" style="margin-top: 8px;">View and manage all students, counsellors, and admins.</p>
             </div>
             <!-- If you want an "Add User" button, it would go here -->
+                    </div>
+        <div style="display: flex; gap: 12px;">
             <a href="dashboard.php" class="btn-outline" style="background: white;">← Back to Overview</a>
+            <a href="add_counsellor.php" class="btn-lime" style="text-decoration: none; color: var(--primary-navy);">+ Add Counsellor</a>
+        </div>
+    </div>
         </div>
         <?php if(isset($_GET['msg'])): ?>
     <div style="background: #dcfce7; color: #166534; padding: 16px; border-radius: 8px; margin-top: 20px; font-weight: 500;">
         <?php 
             if($_GET['msg'] == 'updated') echo "✅ User details successfully updated.";
             if($_GET['msg'] == 'deleted') echo "🗑️ User successfully deleted.";
+            if($_GET['msg'] == 'added') echo "✅ New counsellor successfully added.";
         ?>
     </div>
 <?php endif; ?>
