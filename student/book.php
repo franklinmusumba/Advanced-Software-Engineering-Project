@@ -18,7 +18,7 @@ $initials = $patient ? strtoupper(substr($patient['FirstName'], 0, 1) . substr($
 $therapists = $pdo->query("SELECT TherapistID, FirstName, LastName, Specialization FROM therapists ORDER BY FirstName ASC")->fetchAll();
 
 // Selected filters (for checking already-booked slots)
-$selectedTherapist = isset($_GET['therapist_id']) ? (int)$_GET['therapist_id'] : ($therapists ? (int)$therapists['TherapistID'] : 0);
+$selectedTherapist = isset($_GET['therapist_id']) ? (int)$_GET['therapist_id'] : ($therapists ? (int)$therapists[0]['TherapistID'] : 0);
 $selectedDate      = $_GET['date'] ?? date('Y-m-d', strtotime('+1 day'));
 
 // Find booked times for the chosen counsellor & date
