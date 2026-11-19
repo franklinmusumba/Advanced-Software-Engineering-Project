@@ -9,26 +9,26 @@ $auth->requireRole('Admin');
 // 2. Fetch Data for Admin Dashboard
 try {
     // Total Students
-    $stmt = $pdo->query("SELECT COUNT(*) FROM Patient");
+    $stmt = $pdo->query("SELECT COUNT(*) FROM patients");
     $totalStudents = $stmt->fetchColumn();
 
     // Total Counsellors
-    $stmt = $pdo->query("SELECT COUNT(*) FROM Therapist");
+    $stmt = $pdo->query("SELECT COUNT(*) FROM counsellors");
     $totalCounsellors = $stmt->fetchColumn();
 
     // Appointments this month
-    $stmt = $pdo->query("SELECT COUNT(*) FROM Appointment WHERE MONTH(AppointmentDate) = MONTH(CURRENT_DATE()) AND YEAR(AppointmentDate) = YEAR(CURRENT_DATE())");
+    $stmt = $pdo->query("SELECT COUNT(*) FROM appointments WHERE MONTH(AppointmentDate) = MONTH(CURRENT_DATE()) AND YEAR(AppointmentDate) = YEAR(CURRENT_DATE())");
     $appointmentsThisMonth = $stmt->fetchColumn();
 
         // Appointments per counsellor
     $query = "
-        SELECT t.FirstName, t.LastName, t.Specialization, 
+        SELECT c.FirstName, c.LastName, c.Specialization, 
                COUNT(a.AppointmentID) as Total,
                SUM(CASE WHEN a.Status = 'Booked' THEN 1 ELSE 0 END) as Upcoming,
                SUM(CASE WHEN a.Status = 'Completed' THEN 1 ELSE 0 END) as Completed
-        FROM therapist t
-        LEFT JOIN appointment a ON t.TherapistID = a.TherapistID
-        GROUP BY t.TherapistID
+        FROM counsellors c
+        LEFT JOIN appointments a ON c.CounsellorID = a.CounsellorID
+        GROUP BY c.CounsellorID
     ";
     $stmt = $pdo->query($query);
     $counsellorStats = $stmt->fetchAll();

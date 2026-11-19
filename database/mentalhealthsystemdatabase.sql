@@ -17,7 +17,7 @@ SET time_zone = "+00:00";
 CREATE TABLE `appointments` (
   `AppointmentID` int(11) NOT NULL AUTO_INCREMENT,
   `PatientID` int(11) NOT NULL,
-  `TherapistID` int(11) NOT NULL,
+  `CounsellorID` int(11) NOT NULL,
   `AppointmentDate` date NOT NULL,
   `AppointmentTime` time NOT NULL,
   `DurationMinutes` int(11) NOT NULL,
@@ -25,7 +25,7 @@ CREATE TABLE `appointments` (
   `NotesForSession` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`AppointmentID`),
   KEY `PatientID` (`PatientID`),
-  KEY `TherapistID` (`TherapistID`)
+  KEY `CounsellorID` (`CounsellorID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `moodtrackers` (
@@ -73,17 +73,17 @@ CREATE TABLE `reminders` (
 CREATE TABLE `session_notes` (
   `SessionNoteID` int(11) NOT NULL AUTO_INCREMENT,
   `AppointmentID` int(11) NOT NULL,
-  `TherapistID` int(11) NOT NULL,
+  `CounsellorID` int(11) NOT NULL,
   `NoteContent` varchar(255) NOT NULL,
   `CreatedDate` datetime NOT NULL,
   `IsConfidential` tinyint(1) NOT NULL,
   PRIMARY KEY (`SessionNoteID`),
   UNIQUE KEY `AppointmentID` (`AppointmentID`),
-  KEY `TherapistID` (`TherapistID`)
+  KEY `CounsellorID` (`CounsellorID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-CREATE TABLE `therapists` (
-  `TherapistID` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `counsellors` (
+  `CounsellorID` int(11) NOT NULL AUTO_INCREMENT,
   `FirstName` varchar(50) NOT NULL,
   `LastName` varchar(50) NOT NULL,
   `Specialization` varchar(100) DEFAULT NULL,
@@ -91,7 +91,7 @@ CREATE TABLE `therapists` (
   `Email` varchar(100) NOT NULL,
   `PhoneNumber` varchar(15) DEFAULT NULL,
   `HireDate` date NOT NULL,
-  PRIMARY KEY (`TherapistID`),
+  PRIMARY KEY (`CounsellorID`),
   UNIQUE KEY `LicenseNumber` (`LicenseNumber`),
   UNIQUE KEY `Email` (`Email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -99,7 +99,7 @@ CREATE TABLE `therapists` (
 CREATE TABLE `user_logins` (
   `UserID` int(11) NOT NULL AUTO_INCREMENT,
   `PatientID` int(11) DEFAULT NULL,
-  `TherapistID` int(11) DEFAULT NULL,
+  `CounsellorID` int(11) DEFAULT NULL,
   `Username` varchar(50) NOT NULL,
   `PasswordHash` varchar(255) NOT NULL,
   `Role` varchar(20) NOT NULL,
@@ -107,7 +107,7 @@ CREATE TABLE `user_logins` (
   PRIMARY KEY (`UserID`),
   UNIQUE KEY `Username` (`Username`),
   UNIQUE KEY `PatientID` (`PatientID`),
-  UNIQUE KEY `TherapistID` (`TherapistID`)
+  UNIQUE KEY `CounsellorID` (`CounsellorID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- ==========================================
@@ -117,7 +117,7 @@ CREATE TABLE `user_logins` (
 CREATE TABLE `SessionNoteAudit` (
   `AuditID` int(11) NOT NULL AUTO_INCREMENT,
   `SessionNoteID` int(11) DEFAULT NULL,
-  `TherapistID` int(11) DEFAULT NULL,
+  `CounsellorID` int(11) DEFAULT NULL,
   `ActionTaken` varchar(50) DEFAULT NULL,
   `AuditTimestamp` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`AuditID`)
@@ -134,9 +134,9 @@ CREATE TABLE `PatientArchive` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `CounsellorStats` (
-  `TherapistID` int(11) NOT NULL,
+  `CounsellorID` int(11) NOT NULL,
   `TotalAppointments` int(11) DEFAULT 0,
-  PRIMARY KEY (`TherapistID`)
+  PRIMARY KEY (`CounsellorID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `AppointmentStatusAudit` (
@@ -154,7 +154,7 @@ CREATE TABLE `AppointmentStatusAudit` (
 
 ALTER TABLE `appointments`
   ADD CONSTRAINT `appointments_ibfk_1` FOREIGN KEY (`PatientID`) REFERENCES `patients` (`PatientID`) ON DELETE CASCADE,
-  ADD CONSTRAINT `appointments_ibfk_2` FOREIGN KEY (`TherapistID`) REFERENCES `therapists` (`TherapistID`) ON DELETE CASCADE;
+  ADD CONSTRAINT `appointments_ibfk_2` FOREIGN KEY (`CounsellorID`) REFERENCES `counsellors` (`CounsellorID`) ON DELETE CASCADE;
 
 ALTER TABLE `moodtrackers`
   ADD CONSTRAINT `moodtrackers_ibfk_1` FOREIGN KEY (`PatientID`) REFERENCES `patients` (`PatientID`) ON DELETE CASCADE;
@@ -164,11 +164,11 @@ ALTER TABLE `reminders`
 
 ALTER TABLE `session_notes`
   ADD CONSTRAINT `session_notes_ibfk_1` FOREIGN KEY (`AppointmentID`) REFERENCES `appointments` (`AppointmentID`) ON DELETE CASCADE,
-  ADD CONSTRAINT `session_notes_ibfk_2` FOREIGN KEY (`TherapistID`) REFERENCES `therapists` (`TherapistID`) ON DELETE CASCADE;
+  ADD CONSTRAINT `session_notes_ibfk_2` FOREIGN KEY (`CounsellorID`) REFERENCES `counsellors` (`CounsellorID`) ON DELETE CASCADE;
 
 ALTER TABLE `user_logins`
   ADD CONSTRAINT `user_logins_ibfk_1` FOREIGN KEY (`PatientID`) REFERENCES `patients` (`PatientID`) ON DELETE CASCADE,
-  ADD CONSTRAINT `user_logins_ibfk_2` FOREIGN KEY (`TherapistID`) REFERENCES `therapists` (`TherapistID`) ON DELETE CASCADE;
+  ADD CONSTRAINT `user_logins_ibfk_2` FOREIGN KEY (`CounsellorID`) REFERENCES `counsellors` (`CounsellorID`) ON DELETE CASCADE;
 
 -- ==========================================
 -- 4. TRIGGERS
@@ -191,8 +191,8 @@ CREATE TRIGGER `trg_sessionnote_after_insert`
 AFTER INSERT ON `session_notes`
 FOR EACH ROW
 BEGIN
-    INSERT INTO `SessionNoteAudit` (SessionNoteID, TherapistID, ActionTaken)
-    VALUES (NEW.SessionNoteID, NEW.TherapistID, 'New Session Note Added');
+    INSERT INTO `SessionNoteAudit` (SessionNoteID, CounsellorID, ActionTaken)
+    VALUES (NEW.SessionNoteID, NEW.CounsellorID, 'New Session Note Added');
 END$$
 
 -- Trigger 3: Archive Patients before delete
@@ -211,7 +211,7 @@ FOR EACH ROW
 BEGIN
     UPDATE `CounsellorStats`
     SET TotalAppointments = TotalAppointments - 1
-    WHERE TherapistID = OLD.TherapistID;
+    WHERE CounsellorID = OLD.CounsellorID;
 END$$
 
 -- Trigger 5: Audit Appointment Status Updates

@@ -4,30 +4,30 @@ require_once '../config/config.php';
 require_once '../classes/Auth.php';
 
 $auth = new Auth();
-$auth->requireRole('Therapist');
+$auth->requireRole('Counsellor'); // Updated to match new role
 
-$therapistId = $_SESSION['therapist_id'];
-$tStmt = $pdo->prepare("SELECT FirstName, LastName, Specialization FROM therapists WHERE TherapistID = ?");
-$tStmt->execute([$therapistId]);
-$therapist = $tStmt->fetch();
+$counsellorId = $_SESSION['counsellor_id']; // Updated session variable
+$cStmt = $pdo->prepare("SELECT FirstName, LastName, Specialization FROM counsellors WHERE CounsellorID = ?"); // Updated table and column
+$cStmt->execute([$counsellorId]);
+$counsellor = $cStmt->fetch();
 
-$firstName = $therapist ? $therapist['FirstName'] : 'Counsellor';
-$fullName  = $therapist ? $therapist['FirstName'] . ' ' . $therapist['LastName'] : 'Counsellor';
-$initials  = $therapist ? strtoupper(substr($therapist['FirstName'], 0, 1) . substr($therapist['LastName'], 0, 1)) : 'CO';
+$firstName = $counsellor ? $counsellor['FirstName'] : 'Counsellor';
+$fullName  = $counsellor ? $counsellor['FirstName'] . ' ' . $counsellor['LastName'] : 'Counsellor';
+$initials  = $counsellor ? strtoupper(substr($counsellor['FirstName'], 0, 1) . substr($counsellor['LastName'], 0, 1)) : 'CO';
 
 // Count upcoming booked sessions
-$upcomingStmt = $pdo->prepare("SELECT COUNT(*) FROM appointments WHERE TherapistID = ? AND AppointmentDate >= CURDATE() AND Status = 'Booked'");
-$upcomingStmt->execute([$therapistId]);
+$upcomingStmt = $pdo->prepare("SELECT COUNT(*) FROM appointments WHERE CounsellorID = ? AND AppointmentDate >= CURDATE() AND Status = 'Booked'"); // Updated column
+$upcomingStmt->execute([$counsellorId]);
 $upcomingCount = (int)$upcomingStmt->fetchColumn();
 
 // Count completed sessions
-$completedStmt = $pdo->prepare("SELECT COUNT(*) FROM appointments WHERE TherapistID = ? AND Status = 'Completed'");
-$completedStmt->execute([$therapistId]);
+$completedStmt = $pdo->prepare("SELECT COUNT(*) FROM appointments WHERE CounsellorID = ? AND Status = 'Completed'"); // Updated column
+$completedStmt->execute([$counsellorId]);
 $completedCount = (int)$completedStmt->fetchColumn();
 
 // Count total notes authored by this counsellor
-$notesCountStmt = $pdo->prepare("SELECT COUNT(*) FROM session_notes WHERE TherapistID = ?");
-$notesCountStmt->execute([$therapistId]);
+$notesCountStmt = $pdo->prepare("SELECT COUNT(*) FROM session_notes WHERE CounsellorID = ?"); // Updated column
+$notesCountStmt->execute([$counsellorId]);
 $notesCount = (int)$notesCountStmt->fetchColumn();
 
 // Fetch upcoming & recent appointments for this counsellor
@@ -38,11 +38,11 @@ $scheduleStmt = $pdo->prepare("
     FROM appointments a
     JOIN patients p ON a.PatientID = p.PatientID
     LEFT JOIN session_notes sn ON a.AppointmentID = sn.AppointmentID
-    WHERE a.TherapistID = ?
+    WHERE a.CounsellorID = ?  -- Updated column
     ORDER BY a.AppointmentDate ASC, a.AppointmentTime ASC
     LIMIT 10
 ");
-$scheduleStmt->execute([$therapistId]);
+$scheduleStmt->execute([$counsellorId]);
 $schedule = $scheduleStmt->fetchAll();
 ?>
 <!DOCTYPE html>

@@ -16,11 +16,11 @@ $userId = $_GET['id'];
 // Fetch the user data
 $stmt = $pdo->prepare("
     SELECT u.UserID, u.Username, u.Role, 
-           COALESCE(p.FirstName, t.FirstName, 'Admin') as FirstName,
-           COALESCE(p.LastName, t.LastName, 'User') as LastName
+           COALESCE(p.FirstName, c.FirstName, 'Admin') as FirstName,
+           COALESCE(p.LastName, c.LastName, 'User') as LastName
     FROM user_logins u
     LEFT JOIN patients p ON u.PatientID = p.PatientID
-    LEFT JOIN therapists t ON u.TherapistID = t.TherapistID
+    LEFT JOIN counsellors c ON u.CounsellorID = c.CounsellorID
     WHERE u.UserID = ?
 ");
 $stmt->execute([$userId]);

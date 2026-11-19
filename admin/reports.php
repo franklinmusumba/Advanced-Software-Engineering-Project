@@ -16,12 +16,12 @@ try {
             a.AppointmentDate,
             p.FirstName AS PatientFirst,
             p.LastName AS PatientLast,
-            t.FirstName AS TherapistFirst,
-            t.LastName AS TherapistLast
+            c.FirstName AS CounsellorFirst,
+            c.LastName AS CounsellorLast
         FROM session_notes sn
         JOIN appointments a ON sn.AppointmentID = a.AppointmentID
         JOIN patients p ON a.PatientID = p.PatientID
-        JOIN therapists t ON sn.TherapistID = t.TherapistID
+        JOIN counsellors c ON sn.CounsellorID = c.CounsellorID
         ORDER BY sn.CreatedDate DESC
     ";
     $stmt = $pdo->query($query);
@@ -86,7 +86,7 @@ try {
                                     Student: <?= htmlspecialchars($report['PatientFirst'] . ' ' . $report['PatientLast']) ?>
                                 </h3>
                                 <p class="text-muted text-sm">
-                                    Counsellor: <strong>Dr. <?= htmlspecialchars($report['TherapistFirst'] . ' ' . $report['TherapistLast']) ?></strong>
+                                    Counsellor: <strong>Dr. <?= htmlspecialchars($report['CounsellorFirst'] . ' ' . $report['CounsellorLast']) ?></strong>
                                 </p>
                             </div>
                             <div style="text-align: right;">

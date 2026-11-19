@@ -4,15 +4,15 @@ require_once '../config/config.php';
 require_once '../classes/Auth.php';
 
 $auth = new Auth();
-$auth->requireRole('Therapist');
+$auth->requireRole('Counsellor'); // Updated to match new role
 
-$therapistId = $_SESSION['therapist_id'];
-$tStmt = $pdo->prepare("SELECT FirstName, LastName FROM therapists WHERE TherapistID = ?");
-$tStmt->execute([$therapistId]);
-$therapist = $tStmt->fetch();
+$counsellorId = $_SESSION['counsellor_id']; // Updated session variable
+$cStmt = $pdo->prepare("SELECT FirstName, LastName FROM counsellors WHERE CounsellorID = ?"); // Updated table and column
+$cStmt->execute([$counsellorId]);
+$counsellor = $cStmt->fetch();
 
-$fullName = $therapist ? $therapist['FirstName'] . ' ' . $therapist['LastName'] : 'Counsellor';
-$initials = $therapist ? strtoupper(substr($therapist['FirstName'], 0, 1) . substr($therapist['LastName'], 0, 1)) : 'CO';
+$fullName = $counsellor ? $counsellor['FirstName'] . ' ' . $counsellor['LastName'] : 'Counsellor';
+$initials = $counsellor ? strtoupper(substr($counsellor['FirstName'], 0, 1) . substr($counsellor['LastName'], 0, 1)) : 'CO';
 
 // Fetch appointments belonging ONLY to this counsellor
 $apptStmt = $pdo->prepare("
@@ -20,10 +20,10 @@ $apptStmt = $pdo->prepare("
            p.FirstName AS PFirst, p.LastName AS PLast, p.AnonymousID
     FROM appointments a
     JOIN patients p ON a.PatientID = p.PatientID
-    WHERE a.TherapistID = ?
+    WHERE a.CounsellorID = ? -- Updated column
     ORDER BY a.AppointmentDate DESC, a.AppointmentTime DESC
 ");
-$apptStmt->execute([$therapistId]);
+$apptStmt->execute([$counsellorId]);
 $appointments = $apptStmt->fetchAll();
 
 // Fetch past session notes authored ONLY by this counsellor (FR-16)
@@ -33,10 +33,10 @@ $notesStmt = $pdo->prepare("
     FROM session_notes sn
     JOIN appointments a ON sn.AppointmentID = a.AppointmentID
     JOIN patients p ON a.PatientID = p.PatientID
-    WHERE sn.TherapistID = ?
+    WHERE sn.CounsellorID = ? -- Updated column
     ORDER BY sn.CreatedDate DESC
 ");
-$notesStmt->execute([$therapistId]);
+$notesStmt->execute([$counsellorId]);
 $myNotes = $notesStmt->fetchAll();
 ?>
 <!DOCTYPE html>

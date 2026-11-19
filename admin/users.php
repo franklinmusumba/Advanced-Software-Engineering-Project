@@ -14,11 +14,11 @@ try {
             u.Username, 
             u.Role, 
             u.LastLogin,
-            COALESCE(p.FirstName, t.FirstName, 'Admin') as FirstName,
-            COALESCE(p.LastName, t.LastName, 'User') as LastName
+            COALESCE(p.FirstName, c.FirstName, 'Admin') as FirstName,
+            COALESCE(p.LastName, c.LastName, 'User') as LastName
         FROM user_logins u
         LEFT JOIN patients p ON u.PatientID = p.PatientID
-        LEFT JOIN therapists t ON u.TherapistID = t.TherapistID
+        LEFT JOIN counsellors c ON u.CounsellorID = c.CounsellorID
         ORDER BY u.Role ASC, u.UserID DESC
     ";
     $stmt = $pdo->query($query);
@@ -45,7 +45,7 @@ try {
         }
         .role-admin { background-color: #e2dcf5; color: #1c2b59; }
         .role-patient { background-color: #e7f3d3; color: #1c2b59; }
-        .role-therapist { background-color: #abcbf3; color: #1c2b59; }
+        .role-counsellor { background-color: #abcbf3; color: #1c2b59; }
     </style>
 </head>
 <body>
