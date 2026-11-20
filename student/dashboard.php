@@ -17,9 +17,9 @@ $initials  = $patient ? strtoupper(substr($patient['FirstName'], 0, 1) . substr(
 
 $apptStmt = $pdo->prepare("
     SELECT a.AppointmentDate, a.AppointmentTime, a.DurationMinutes, a.Status,
-           t.FirstName AS TFirst, t.LastName AS TLast, t.Specialization
+           c.FirstName AS CFirst, c.LastName AS CLast, c.Specialization
     FROM appointments a
-    JOIN therapists t ON a.TherapistID = t.TherapistID
+    JOIN counsellors c ON a.CounsellorID = c.CounsellorID
     WHERE a.PatientID = ? AND a.AppointmentDate >= CURDATE() AND a.Status = 'Booked'
     ORDER BY a.AppointmentDate ASC, a.AppointmentTime ASC
     LIMIT 3
@@ -142,12 +142,12 @@ $avgMood = count($recentMoods) > 0
             </div>
         </div>
 
-        <?php if (count($appointments) > 0): $next = $appointments; ?>
+        <?php if (count($appointments) > 0): $next = $appointments[0]; ?>
             <section class="reminder">
                 <span class="icon-box">📅</span>
                 <div>
                     <span>Coming up next</span>
-                    <h3>Session with <?= htmlspecialchars($next['TFirst'] . ' ' . $next['TLast']) ?></h3>
+                    <h3>Session with <?= htmlspecialchars($next['CFirst'] . ' ' . $next['CLast']) ?></h3>
                     <p><?= date('l, j F', strtotime($next['AppointmentDate'])) ?> · <?= date('g:i A', strtotime($next['AppointmentTime'])) ?> (<?= (int)$next['DurationMinutes'] ?> mins)</p>
                 </div>
                 <a href="appointments.php" class="btn secondary" style="background: rgba(255,255,255,.55); border: 0;">View all</a>
@@ -190,7 +190,7 @@ $avgMood = count($recentMoods) > 0
                                 <span><?= date('M', strtotime($appt['AppointmentDate'])) ?></span>
                             </div>
                             <div>
-                                <b><?= htmlspecialchars($appt['TFirst'] . ' ' . $appt['TLast']) ?></b>
+                                <b><?= htmlspecialchars($appt['CFirst'] . ' ' . $appt['CLast']) ?></b>
                                 <span><?= htmlspecialchars($appt['Specialization'] ?? 'Counselling') ?> · <?= date('g:i A', strtotime($appt['AppointmentTime'])) ?></span>
                             </div>
                             <span class="badge"><?= htmlspecialchars($appt['Status']) ?></span>
